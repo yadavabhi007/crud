@@ -11,12 +11,9 @@
         <th scope="col">ID</th>
         <th scope="col">Name</th>
         <th scope="col">Email</th>
-        <th scope="col">Mobile</th>
         <th scope="col">City</th>
         <th scope="col">State</th>
-        <th scope="col">Pin</th>
         <th scope="col">Gender</th>
-        <th scope="col">Date of Birth</th>
         <th scope="col">Action</th>
       </tr>
     </thead>
@@ -26,114 +23,76 @@
         <th scope="row">{{st.id}}</th>
         <td>{{st.name}}</td>
         <td>{{st.email}}</td>
-        <td>{{st.mobile}}</td>
         <td>{{st.city}}</td>
         <td>{{st.state}}</td>
-        <td>{{st.pin}}</td>
         <td>{{st.gender}}</td>
-        <td>{{st.dob}}</td>
         <td>
-          <a href="{% url 'updatedata' st.id %}" class="btn btn-warning">Edit</a>
-          <a href="" value="{{st.pk}}" data-toggle="modal" data-target="#exampleModal"
-            class="btn btn-danger myclass">Delete</a>
-
+          <a href="{% url 'updatedata' st.id %}" class="btn btn-warning btn-sm">Edit</a>
+          <input type="submit" data-toggle="modal" data-target="#exampleModal{{st.id}}" class="btn btn-danger btn-sm" value="Delete">
         </td>
       </tr>
+
+      <div class="modal fade" id="exampleModal{{st.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{st.id}}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel{{st.id}}">Delete</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Are You Really Want To Delete ?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <a href="{% url 'deletedata' st.id %}"><button type="button" class="btn btn-danger">Delete</button></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {% endfor %}
     </tbody>
   </table>
-  {% else %}
-  <h3 class="text-center alert alert-warning">No Record</h3>
-  {% endif %}
 </div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Student </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
 
+<h2 class=" alert alert-dark">
+  <nav aria-label="...">
+    {% if is_paginated %}
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+      {% for i in paginator.page_range %}
+      {% if page_obj.number == i %}
+      <li class="page-item active" aria-current="page">
+        <a class="page-link" href="?page={{ i }}">{{i}}</a>
+      </li>
+      {% else %}
+      <li><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+      {% endfor %}
+      <li class="page-item">
+        {% if page_obj.has_next %}
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        {% endif %}
+      </li>
+    </ul>
+    {% endif %}
+    <a href="/" class="btn btn-primary">Home</a>
+  </nav>
+</h2>
+{% else %}
+<h3 class="text-center alert alert-warning">No Record</h3>
+<a href="/" class="btn btn-primary">Home</a>
+{% endif %}
 
-
-      <div class="modal-body">
-
-        Do You Want To Delete this Recoard ?
-
-      </div>
-      <script src="{% static 'myapp/js/jquery.js' %}"></script>
-
-      <div class="modal-footer">
-
-        <button type="button" class="btn btn-primary"> <a href="{% url 'showdata' %}"
-            style="text-decoration: none; color: aliceblue;">Back</a></button>
-        <button type="button" class="btn btn-primary"> <a id="deletehref" href=""
-            style="text-decoration: none; color: aliceblue;">Delete</a></button>
-
-
-      </div>
-    </div>
-  </div>
-
-
-
-
-
-  <script>
-    $(".myclass").click(function () {
-      var pk = $(this).attr('value');
-      $("#deletehref").prop("href", "/delete/" + pk)
-
-    })
-
-  </script>
-
-
-
-  <script src="{% static 'myapp/js/jquery.js' %}"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
-
-</div>
-
-<h2 class=" alert alert-dark">
-  <div>
-    <nav aria-label="...">
-      {% if is_paginated %}
-      <ul class="pagination">
-        {% if page_obj.has_previous %}
-        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        {% endif %}
-        {% for i in paginator.page_range %}
-        {% if page_obj.number == i %}
-        <li class="page-item active" aria-current="page">
-          <a class="page-link" href="?page={{ i }}">{{i}}</a>
-        </li>
-        {% else %}
-        <li><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-        {% endif %}
-        {% endfor %}
-        <li class="page-item">
-          {% if page_obj.has_next %}
-          <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-          {% endif %}
-        </li>
-      </ul>
-      {% endif %}
-      <a href="/" class="btn btn-primary">Home</a>
-    </nav>
-</h2>
-
-
 {% endblock content %}

@@ -6,13 +6,13 @@ from django.views import View
 from django.views.generic.list import ListView
 # Create your views here.
 
+
 class add_data(TemplateView):
     template_name = 'myapp/add.html'
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         fm = StudentRegistration()
-        student = User.objects.all()
-        context = {'form':fm, 'st':student}
+        context = {'form':fm}
         return context
     def post(self, request):
         fm = StudentRegistration(request.POST)
@@ -20,15 +20,8 @@ class add_data(TemplateView):
             fm.save()
             fm = StudentRegistration()
             return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/')
 
-# class show_data(TemplateView):
-#     template_name = 'myapp/show.html'
-#     def get_context_data(self, *args, **kwargs):
-#         context = super().get_context_data(*args, **kwargs)
-#         student = User.objects.all()
-#         context = {'st':student}
-#         return context
-            
 
 class update_data(View):
     def get(self, request, id):
@@ -40,15 +33,15 @@ class update_data(View):
         fm = StudentRegistration(request.POST, instance=pi)
         if fm.is_valid():
             fm.save()
-            fm = StudentRegistration()
         return render (request, 'myapp/update.html', {'form':fm})
+
 
 class show_data(ListView):
     model = User
     template_name = 'myapp/show.html'
     context_object_name = 'st'
     paginate_by = 5
-    student = User.objects.all()
+    student = User.objects.all().order_by('-id')
     context = {'st':student}  
 
 

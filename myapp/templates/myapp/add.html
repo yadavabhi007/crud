@@ -7,7 +7,7 @@
         <form action="" method='POST'>
             {% csrf_token %}
             {{form.as_p}}
-            <input type="Submit" class="btn btn-success" value="Add">
+            <input type="submit" id="btnsave" class="btn btn-success" value="Save">
             <a href="{% url 'showdata' %}" class="btn btn-warning">Data</a>
         </form>
     </div>
